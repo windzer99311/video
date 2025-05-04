@@ -8,7 +8,10 @@ import { randomUUID } from "crypto";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const downloadsDir = path.join(__dirname, "../downloads");
+// Use a different path for production environment
+const downloadsDir = process.env.NODE_ENV === 'production'
+  ? '/opt/render/project/downloads'
+  : path.join(__dirname, "../downloads");
 
 // Ensure downloads directory exists
 if (!fs.existsSync(downloadsDir)) {
@@ -137,7 +140,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         estimatedTime: "calculating...",
         filePath: outputFilePath,
         status: "downloading",
-        error: null
+        error: null as string | null
       };
 
       // Add to active downloads
@@ -157,10 +160,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error(`stderr: ${errorChunks}`);
           
           downloadTracker.status = "error";
-          downloadTracker.error = errorChunks ? errorChunks : null;
+          downloadTracker.error = errorChunks || null;
           
           // Update job in database
-          await storage.updateDownloadJobStatus(downloadId, "error", errorChunks);
+          await storage.updateDownloadJobStatus(downloadId, "error", errorChunks || null);
           
           return;
         }
