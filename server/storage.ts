@@ -53,9 +53,9 @@ export const storage = {
   },
 
   getDownloadById: async (id: string) => {
-    // Cast column type for proper type checking
+    // Use string comparison for proper type checking
     return await db.query.downloads.findFirst({
-      where: eq(downloads.downloadJobId as unknown as typeof downloads.id, id)
+      where: (downloads) => eq(downloads.downloadJobId, id)
     });
   },
 
