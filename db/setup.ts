@@ -1,8 +1,7 @@
-import { db } from "../db";
-import { users, downloads, downloadJobs } from "../shared/schema";
+import { db } from "./index";
 import { sql } from "drizzle-orm";
 
-async function setup() {
+export async function setupDatabase() {
   try {
     console.log("Setting up database tables...");
     
@@ -41,12 +40,9 @@ async function setup() {
     `);
     
     console.log("Database setup complete!");
+    return true;
   } catch (error) {
     console.error("Error setting up database:", error);
-    process.exit(1);
+    return false;
   }
-  
-  process.exit(0);
 }
-
-setup();
