@@ -8,9 +8,9 @@ import { randomUUID } from "crypto";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Use a different path for production environment
+// Use temporary directory for production environment on free plan
 const downloadsDir = process.env.NODE_ENV === 'production'
-  ? '/opt/render/project/downloads'
+  ? '/tmp/downloads'
   : path.join(__dirname, "../downloads");
 
 // Ensure downloads directory exists
